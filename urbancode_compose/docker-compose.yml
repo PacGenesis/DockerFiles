@@ -1,0 +1,29 @@
+version: '2'
+services:
+  ucdserver:
+    image: registry.ng.bluemix.net/scottpecnik/ucdserver
+    container_name: ucdserver
+    ports:
+      - 134.168.15.94:8443:8443
+      - 134.168.15.94:7918:7918
+  mysqlserver:
+    image: registry.ng.bluemix.net/scottpecnik/ucddemo-mysql
+    container_name: mysqljpetstore
+  uatagent:
+    image: registry.ng.bluemix.net/scottpecnik/ucdagent-tomcat-uat
+    container_name: uatagent
+    ports:
+      - 134.168.12.112:8080:8080
+    links:
+      - mysqlserver:mysqljpetstore
+    depends_on:
+      - mysqlserver
+  sitagent:
+    image: registry.ng.bluemix.net/scottpecnik/ucdagent-tomcat-sit
+    container_name: sitagent
+    ports:
+      - 134.168.19.178:8080:8080
+    links:
+      - mysqlserver:mysqljpetstore
+    depends_on:
+      - mysqlserver
